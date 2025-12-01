@@ -1,8 +1,6 @@
 import axios from "axios";
 
-const API_BASE = "http://localhost:5000";
-// const API_BASE = import.meta.env.VITE_API_URL;
-
+const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
 export const api = {
   uploadResume: (file) => {
@@ -15,14 +13,22 @@ export const api = {
 
   getCandidate: (id) => axios.get(`${API_BASE}/candidates/${id}`),
 
-  requestDocuments: (id) =>
-    axios.post(`${API_BASE}/candidates/${id}/request-documents`),
+  requestDocuments: (id) => axios.post(`${API_BASE}/candidates/${id}/request-documents`),
 
   uploadDocuments: (id, pan, aadhaar) => {
     const form = new FormData();
     if (pan) form.append("pan", pan);
     if (aadhaar) form.append("aadhaar", aadhaar);
-
     return axios.post(`${API_BASE}/candidates/${id}/submit-documents`, form);
-  }
+  },
+
+  validateDocs: (id) => axios.post(`${API_BASE}/candidates/${id}/validate-docs`), 
+
+  runBGV: (id) => axios.post(`${API_BASE}/candidates/${id}/bgv`),
+
+  generateAISummary: (id) => axios.post(`${API_BASE}/candidates/${id}/ai-summary`),
+
+  saveConsent: (id, body) => axios.post(`${API_BASE}/candidates/${id}/consent`, body),
+
+  getAudit: (id) => axios.get(`${API_BASE}/candidates/${id}/audit`)
 };
